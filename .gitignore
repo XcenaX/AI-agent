@@ -1,0 +1,55 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+
+# venv
+.venv/
+venv/
+ENV/
+env/
+
+# packaging / builds
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# logs
+*.log
+
+# ---- IDE ----
+.vscode/
+.idea/
+*.iml
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Secrets ----
+.env
+.env.*
+
+# ---- Playwright / Browser profiles (persistent sessions) ----
+profile/
+profiles/
+user_data/
+pw-profile/
+**/SingletonLock
+**/SingletonCookie
+**/SingletonSocket
+
+# ---- Playwright artifacts (optional) ----
+playwright-report/
+test-results/
+
+# ---- Rich / cache (optional) ----
+.cache/
+
+profile/
+
+logs/
