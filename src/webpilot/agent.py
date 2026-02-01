@@ -11,7 +11,6 @@ from rich.panel import Panel
 from .browser.controller import BrowserController, BrowserConfig
 from .browser.observe import PageObserver
 from .memory import CompactMemory
-from .safety import is_sensitive
 from .llm.openai_adapter import OpenAIAdapter
 from .llm.anthropic_adapter import AnthropicAdapter
 from .llm.comet_messages_adapter import CometMessagesAdapter
@@ -1143,17 +1142,6 @@ class WebPilotAgent:
                         })
                         continue
 
-                    if is_sensitive(action, obs):
-                        console.print(Panel(f"[red]SENSITIVE ACTION[/red]\n{action}\nConfirm? (y/n)", expand=False))
-                        if (await ainput("> ")).strip().lower() != "y":
-                            self.memory.add(f"Denied sensitive action: {action}")
-                            input_items.append({
-                                "type": "function_call_output",
-                                "call_id": call.call_id,
-                                "output": json.dumps({"denied": True, "reason": "User denied"}, ensure_ascii=False)
-                            })
-                            continue
-
                     try:
                         log.info("[green]TOOL[/] %s args=%s", name, args)
                         out = await self._execute_tool(name, args)
@@ -1706,20 +1694,6 @@ class WebPilotAgent:
                         "content": json.dumps({"answer": user_answer}, ensure_ascii=False),
                     })
                     continue
-
-                # Security layer
-                action = {"tool": name, **args}
-                if is_sensitive(action, obs_small):
-                    print(f"\n[SENSITIVE ACTION]\n{action}\nConfirm? (y/n)")
-                    if (await ainput("> ")).strip().lower() != "y":
-                        self.memory.add(f"Denied sensitive action: {action}")
-                        tool_results_blocks.append({
-                            "type": "tool_result",
-                            "tool_use_id": call["id"],
-                            "content": json.dumps({"denied": True, "reason": "User denied"}, ensure_ascii=False),
-                            "is_error": False,
-                        })
-                        continue
 
                 # delegate -> sub-agent call
                 if name == "delegate":

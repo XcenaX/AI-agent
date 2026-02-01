@@ -32,7 +32,6 @@ Thumbs.db
 
 # ---- Secrets ----
 .env
-.env.*
 
 # ---- Playwright / Browser profiles (persistent sessions) ----
 profile/
